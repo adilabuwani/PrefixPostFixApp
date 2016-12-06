@@ -1,49 +1,58 @@
+import java.io.*;
 import java.util.*;
 public class InfixApp {
 	
-	public static void main(String[] args){
-		String input, output;
-		char uInput;
+	public static void main(String[] args)throws IOException{
 		Scanner keyb= new Scanner(System.in);
+		String input, output;
+		InToPost theTrans;
+		ParsePost theParser= new ParsePost();
+		
 		while (true){
-			System.out.println("Enter Infix e.g: y=a+b; ");//ask the user for input
-			input=keyb.nextLine(); //from the keyb(object.method)
-			
-			if(input.equals(" ")||!input.contains("=")){ break;}
-
-			InToPost theTrans= new InToPost(input); //assign input
-			
-			output=theTrans.doTrans();// do the translation in postfix, and assign to output
-			
-			System.out.println("Postfix is:"+output);//print output
-			
-			//to evaluate the postfix expression:
-			ParsePost theParser= new ParsePost(output);
-			//set variables from user 
-			theParser.setVariable(keyb);
-			System.out.println("Evaluates to: "+theParser.doParse());
-			
-			while(true){
-				System.out.println("Would you like to use same values assigned to variables for evaluating the next expression? Y/N");
-				 uInput=keyb.nextLine().charAt(0);
-				 if(uInput!='y'){
-					 theParser.clearSymtab(); //clear the saved variables in symtab
-					 break;
-				 }
-					System.out.println("Enter Infix: ");//ask the user for input
-					input=keyb.nextLine(); //from the keyb(object.method)
-					
-					InToPost theTran= new InToPost(input); //do the translation in postfix
-					
-					String postFix=theTran.doTrans();
-					System.out.println("Postfix Is:"+postFix);
-					
-					theParser.setInput(postFix); //set input as the postfix expression
-					System.out.println("Evaluates to: "+theParser.doParse());
+		System.out.print(">>");
+		input=getString();       //user input
+		
+		//input contains =, then its assigning first
+		if(input.contains("=")){  
+		theParser.pushSymtab(input);  //push the variable to symtab
+		}
+		else if(input.length()>1){  //input is an expression, evaluate to postfix first
+			//this is for both convert to postfix <<<<<<<<<<<<<<
+			theTrans= new InToPost(input);
+			output=theTrans.doTrans();
+			System.out.println("Postfix: "+output);
+			//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+			//check if symtab is empty
+			if(theParser.SybTabEmpty()){ //if symtab is empty, set as input
+				theParser.setInput(output);
+				theParser.setVariable(keyb); //set variables from keyb, and push to symtab
+				int result=theParser.doParse();  //do translation
+				System.out.println("Evaluates: "+result);
 				
-			}	
 			
-       }//end while
-		keyb.close(); 
+			}else{  //symtab not empty, set variables do translation
+				theParser.setInput(output);
+				int result=theParser.doParse();  //do translation
+				System.out.println("Evaluates: "+result);
+				
+			}
+			
+			
+		}//end else if
+		else{ //else lookup the value from Symtab, and return back the value
+			
+			
+		}//end else
+      } //end while(true)
+		
+		
+	}
+	public static String getString() throws IOException{
+		InputStreamReader isr = new InputStreamReader(System.in);
+		BufferedReader br = new BufferedReader(isr);
+		String s = br.readLine();
+	
+		return s;
+		
 	}
 }

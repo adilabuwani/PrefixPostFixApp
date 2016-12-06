@@ -1,7 +1,7 @@
 import java.util.*;
 
 public class ParsePost {
-private stackX theStack;
+Stack<Integer> theStack;
 private SYMTAB theSymtab;
 private String input;     
 private int size;
@@ -11,15 +11,20 @@ public ParsePost(String in){
 	input=in;               //takes in input as a PostFix
 	size=input.length();    //store the length
 	theSymtab= new SYMTAB(size); 
-	theStack= new stackX(size); //new object theStack of size
-	
+	theStack=new Stack<Integer>();// new generic stack called theStack
+}
+public ParsePost(){
+	input="";               //no input yet
+	size=10;    //default  length set to 10, we will resize this
+	theSymtab= new SYMTAB(); //symtab by default set to size 10
+	theStack= new Stack<Integer>();//Generic Stack of integer
 }
 
 //accessors
 public int getOperand(){ //get number of operands present in the postfix expression
 	int count=0;    //counts the number of operands present
 	char ch;
-	for(int i=0;i<size;i++){
+	for(int i=0;i<input.length();i++){
 		 ch=input.charAt(i); //each character at a time
 		 if(this.IsOperand(ch)&&!this.isInteger(ch)){  //is operand and not an integer
 			 count++;            //if is operand, increment
@@ -31,6 +36,8 @@ public int getOperand(){ //get number of operands present in the postfix express
 //mutators
 public void setInput(String in){
 	this.input=in;
+	this.size=input.length();
+	
 }
 
 public void setVariable(Scanner keyb){  //set variables from keyboard
@@ -126,6 +133,8 @@ if(in.contains("=")&& in.length()>=3){ //if contains an equal sign, and the leng
 	}
 return false; //not in valid form
 }
+
+
 public void clearSymtab(){
 	this.theSymtab.clear();  //clear symtab
 }
@@ -134,6 +143,42 @@ public boolean isInteger(char ch){
 	return (ch>'1'&&ch<='9');         //return true if integer
 }
 
+
+//push variables to symtab
+public void pushSymtab(String in){
+	
+	if(this.IsValidExp(in)){ //if is a valid expression
+		
+		String []SplitInput=in.split("="); //split it to an array 	
+		 
+		char LHS=SplitInput[0].charAt(0); //the first index is a variable
+		
+		String val= SplitInput[1];//the next index is a value
+		if(val.contains(";")){ // contains a semicolom?
+			val=val.replaceAll(";","");
+			val.trim();			//remove whitespace from front and back
+		}
+		
+		int RHS=Integer.parseInt(val); //parse to integer
+		
+		theSymtab.insert(LHS, RHS);    //push to Symtab
+		
+		System.out.println("Pair");
+
+}else{
+	System.out.println("Something went wrong, try again");
+}
+	
+} //end pushSymtab
+
+public boolean SybTabEmpty(){
+	if(this.theSymtab.isEmpty()){
+		return true;
+	}else{
+		return false;
+	}
+}
+///////////////////////////////////////
 
 
 

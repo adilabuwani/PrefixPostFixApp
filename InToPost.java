@@ -2,25 +2,11 @@ public class InToPost {
 private stack theStack;
 private String input;
 private String output="";
-private char lhs;
+
 public InToPost(String in){
-	setInput(in);
+     this.input=in;	
 	int stackSize=input.length();//get the length of the stack
-	this.theStack= new stack(stackSize); //new object called theStack 
-}
-//mutator
-public void setInput(String in){
-	int size=in.length();  //get the size
-   String []splitInput=new String[size];
-   
-   splitInput=in.split("=");
-   lhs=splitInput[0].charAt(0); 
-   
-   if(splitInput[1].contains(";")){ // contains a semicolom?
-	   splitInput[1]=splitInput[1].replaceAll(";","");
-	   splitInput[1].trim();			//remove whitespace from front and back
-	}
-   this.input=splitInput[1];
+	this.theStack= new stack(stackSize); //theStack is an instance of stack 
 }
 
 public String doTrans(){
