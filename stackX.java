@@ -1,3 +1,4 @@
+
 public class stackX {
 public int maxSize;
 public int []StackArray;

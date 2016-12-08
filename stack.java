@@ -1,3 +1,4 @@
+
 public class stack {
 private int maxSize;
 private char []stackArray;

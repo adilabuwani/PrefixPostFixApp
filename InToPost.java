@@ -4,15 +4,16 @@ private String input;
 private String output="";
 
 public InToPost(String in){
-     this.input=in;	
+	input=in;
 	int stackSize=input.length();//get the length of the stack
-	this.theStack= new stack(stackSize); //theStack is an instance of stack 
+	this.theStack= new stack(stackSize); //new object called theStack 
 }
-
 public String doTrans(){
 	for(int i=0;i<input.length();i++){//we will test for each character at a time
 		
 		char ch=input.charAt(i);//ch is the character at each index
+		theStack.displayStack("For "+ch+" ");
+		
 		switch(ch){
 		case '+':
 		case '-':
@@ -36,9 +37,11 @@ public String doTrans(){
 	}//end for
 	//the remaining operators, we will pop all the remaining operators
 	while(!theStack.isEmpty()){
-
+		theStack.displayStack("While Stack not empty: ");
 		this.output=output+theStack.pop();//write the remaining elements and pop to output
 	}
+	theStack.displayStack("End  "); 
+	
 	return output;
 		
 }
@@ -84,7 +87,6 @@ public void gotParen(char ch){
 		}
 	}//end while
 }//end popups
-
 
 
 }//end of class
